@@ -113,6 +113,6 @@ int main()
 		to-do
 
 	~ initialize all members of SECURITY_DESCRIPTOR except for the first three struct members
-	(already init using InitializeSecurityDescriptor function)
+	(first three already init using InitializeSecurityDescriptor function)
 
 */
