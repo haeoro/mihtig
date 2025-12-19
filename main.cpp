@@ -5,77 +5,17 @@
 
 #include <iostream>
 #include <windows.h>
+#include "init.h"
 
 int main()
 {
-	SECURITY_DESCRIPTOR secObjInfo{}; // contains info such as, owner, group, Sacl, Dacl, control. (Important)
-
-	// SID structure stuff
-	SID_IDENTIFIER_AUTHORITY sia
-	{
-		5
-	};
-	PSID si{}; // this security identification object determines what level of authority we have. 
-
-	BOOL sid = AllocateAndInitializeSid( // function to initialize our 
-		&sia,
-		1,
-		0x000001F4,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		&si
-	);
-	//std::cout << sid;
-	// END OF
-
-	// set revision level and give default initialization to mostly everything else in the struct (SECURITY_DESCRIPTOR). 
-
-	BOOL setRevision = InitializeSecurityDescriptor(
-		&secObjInfo,
-		SECURITY_DESCRIPTOR_REVISION
-	);
-
-	// end 
-
-	// set owner of SECURITY_DESCRIPTOR
-
-	BOOL secDesOwner = SetSecurityDescriptorOwner(
-		&secObjInfo,
-		&si,
-		0
-	);
-
-	// end 
-
-	// set group for SECURITY_DESCRIPTOR
-	BOOL secDesGroup = SetSecurityDescriptorGroup(
-		&secObjInfo,
-		&si,
-		0
-	);
-	// end 
-
-	// set SACL for SECURITY_DESCRIPTOR
-	
-	// commented out for now, need to make sure owner arguments are being configured correctly. 
-	/*
-	BOOL setDesSACL = SetSecurityDescriptorSacl(
-		&secObjInfo, 
-
-	);
-	*/
-
-	// end
+	init a;
+	SECURITY_DESCRIPTOR X = a.security_descriptor_init();
 
 	SECURITY_ATTRIBUTES procAttribs // this gets passed as a pointer to this struct as an argument to CreateProcessA() function.
 	{
 		sizeof(SECURITY_ATTRIBUTES),
-		&secObjInfo, // pointer to the SECURITY_DESCRIPTOR struct.
+		&X, // pointer to the SECURITY_DESCRIPTOR struct.
 		FALSE // tells us whether the security_attributes is inheritable.
 	};
 
@@ -84,12 +24,12 @@ int main()
 	STARTUPINFOA sInfo{ 0 }; // startup structure initialized to 0 to pass to CreateProcessA() (default)
 	PROCESS_INFORMATION pInfo{ 0 }; // proc info initialized to 0 to pass it to the CreateProcessA() structure (default)
 
-
+	// function to create the higher level process. 
 	BOOL mainProc = CreateProcessA(
 		NULL,
 		(LPSTR)"C:\\Windows\\System32\\cmd.exe", // path to application to be run
 		&procAttribs, // pointer to SECURITY_ATTRIBUTES struct here (defines descriptor).
-		// we haven't done any customizations for anything else up to this point.
+		// we haven't done any modificatons for the other arguments up to this point.
 		NULL,
 		FALSE,
 		CREATE_NEW_CONSOLE,
