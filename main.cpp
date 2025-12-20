@@ -10,17 +10,15 @@
 int main()
 {
 	init sd;
-
-	sd.secDiscriptorInit();
+	sd.initializeSecurityDescriptor();
+	SECURITY_DESCRIPTOR x = sd.getSecurityDescriptor();
 
 	SECURITY_ATTRIBUTES procAttribs // this gets passed as a pointer to this struct as an argument to CreateProcessA() function.
 	{
 		sizeof(SECURITY_ATTRIBUTES),
-		&sd.securityDescriptor(), // pointer to the SECURITY_DESCRIPTOR struct.
+		&x, // pointer to the SECURITY_DESCRIPTOR struct.
 		FALSE // tells us whether the security_attributes is inheritable.
 	};
-
-
 
 	STARTUPINFOA sInfo{ 0 }; // startup structure initialized to 0 to pass to CreateProcessA() (default)
 	PROCESS_INFORMATION pInfo{ 0 }; // proc info initialized to 0 to pass it to the CreateProcessA() structure (default)
