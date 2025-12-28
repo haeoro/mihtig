@@ -10,7 +10,8 @@
 int main()
 {
 	init sd;
-	sd.initializeSecurityDescriptor();
+	sd.setSecurityDescriptor();
+	std::cout << "init sec descriptor error: " << GetLastError() << "\n";
 	SECURITY_DESCRIPTOR x = sd.getSecurityDescriptor();
 
 	SECURITY_ATTRIBUTES procAttribs // this gets passed as a pointer to this struct as an argument to CreateProcessA() function.
