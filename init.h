@@ -65,12 +65,6 @@ public:
 			1
 		);
 		// end
-
-		// checks validity of the SECURITY_DESCRIPTOR object. 
-		BOOL checkValidity = IsValidSecurityDescriptor(
-			&secObjInfo
-		);
-		// end
 	}
 
 	SECURITY_DESCRIPTOR getSecurityDescriptor() 
